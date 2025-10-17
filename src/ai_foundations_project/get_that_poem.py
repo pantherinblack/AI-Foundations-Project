@@ -3,7 +3,6 @@ from openai import OpenAI
 
 app = FastAPI()
 
-
 @app.get("/poem")
 def get_poem(
     poet: str = Query(..., description="Name of the poet"),
