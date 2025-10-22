@@ -1,6 +1,12 @@
 # Doku
 
 ##  Technische Möglichkeiten von GPT Assistenten
+https://chatgpt.com/share/68f8c433-f834-800c-bc17-439c498e033b
+### System Instructions
+### Files / File Search
+### Code Interpreter
+### Functions
+### Rückgabe Format
 
 ## Ideen
 ### Kilter Assistant
