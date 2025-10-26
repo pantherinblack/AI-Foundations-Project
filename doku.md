@@ -3,10 +3,13 @@
 ##  Technische Möglichkeiten von GPT Assistenten
 https://chatgpt.com/share/68f8c433-f834-800c-bc17-439c498e033b
 ### System Instructions
+Die System Instructions können genutzt werden um dem Assistant einen groben Rahmen zu geben wie er sich verhalten soll, wie Tief ins Detail er mit seinen Antworten gehen soll und für welches Themenfeld er geschaffen ist.
 ### Files / File Search
+Man kann dem Assistenten Textdateien hochladen damit er damit arbeiten kann. Der Assistant kann die Dateien als Wissensquelle nutzen um Themen über die er nicht viele informational hätte besser zu verstehen und spezifische Antworten zu geben.
 ### Code Interpreter
+Der Code Interpreter wird dafür genutzt Python Code auszuführen um Daten zu analysieren, Diagramme zu erstellen oder Berechnungen durch zu führen. Der Assistenten schreibt dann Python Code um das resultat des Ausgeführten codes dem Nutzer auszugeben.
 ### Functions
-### Rückgabe Format
+Über Functions kann ein Assistenten mit externene Systemen kommunizieren, oder man kann sich zurückgegebenen Daten strukturieren lassen. Das heisst der Assistant kann selbst API-Abfragen machen und die rückgabe verarbeiten.
 
 ## Ideen
 ### Kilter Assistant
