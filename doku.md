@@ -45,7 +45,13 @@ Man gibt der KI einfach eine Text-Datei oder ein Text und Bekommt einen Text rau
 Die Idee fanden wir lustig. Die technische Umsetzung währe gut möglich gewesen und hätte interessante Aspect wie das Auslesen und Schreibe von Dateien beinhalted.
 Wir haben uns dagegen entschieden da wir einen sehr geringen Nutzen sahen.
 
-## Umsetzen ...
+## Umsetzen
+### Setup
+Da es eine Gruppen arbeit war, wurde damit gestarted ein Git-Repository anzulegen. Für das 
+
+### Backend
+Gestarted wurde damit das Projektsetup zu machen. Für wird als Dependencies-Management-Tool Poetry verwendet, damit man gut zusammenarbeiten kann und alles immer
+### Frontend
 
 ## Auswerten
 
