@@ -57,9 +57,11 @@ Assistent können nämlich nur mit dem API-Key des eigenen Account angesprochen 
 Da wir eher eine kleine Web-App in gedanken hatten war das natürlich völlig unsinnig. Stattdessen wird ein normales Modell (GPT 4.1 mini) angesprochen, das auch Bilder analysieren kann.
 Die meiste arbeit wurde in das erstellen von den Systemprompts gebraucht. 
 Es gibt zwei unterschiedliche Prompts einen für den fall, dass ein Thema mitgegeben wird, und der Andere für den fall, dass der User ein Bild anstelle des Themas mit gibt.
-
-
-
+#### Prompt
+Als erstes wird die Rolle des Assistants definiert hier wird ihm erklärt wie er sich verhalten soll und was er verarbeiten soll.
+Danach wird dem Assistent erklärt was er mit dem Input des Users machen soll.
+Als letztes wird ihm noch gesagt wie der Output strukturiert werden soll und ein Beispiel.
+Der ganze prompt ist wie eine Anleitung aufgebaut die befolgt werden soll. Damit die Outputs möglichst ähnlich bleiben.
 
 ### Frontend
 
