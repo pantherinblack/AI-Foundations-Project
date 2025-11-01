@@ -26,7 +26,6 @@ Allerdings hat sich beim Testen, im OpenAI Playground, herausgestellt, dass das 
 Auch die einschätzung des Schwierigkeitsgrades ist schwer da man auf Bildern nicht gut erkennt wie gut ein Griff ist.
 Daher haben wir uns schlussendlich gegen die Idee entschieden.
 
-
 ### Dichter
 Die Idee hierbei ist, dass der Assistant ein Gedicht auf basis eines Dichters, eines Gedichttyps und eines Themas oder Bildes schreibt.
 Zum Beispiel kann der Nutzer "Goethe", "Sonett" und "Wolf" angeben, daraufhin generiert der Assistant ein neues Sonett über einen Wolf im Stil von Goethe.
@@ -47,10 +46,21 @@ Wir haben uns dagegen entschieden da wir einen sehr geringen Nutzen sahen.
 
 ## Umsetzen
 ### Setup
-Da es eine Gruppen arbeit war, wurde damit gestarted ein Git-Repository anzulegen. Für das 
+Da es eine Gruppen arbeit war, wurde damit gestartet ein Git-Repository anzulegen. Für das Dependencies-Management im Backend benutzen wir Poetry und im Frontend Jarn.
 
 ### Backend
-Gestarted wurde damit das Projektsetup zu machen. Für wird als Dependencies-Management-Tool Poetry verwendet, damit man gut zusammenarbeiten kann und alles immer
+Als erstes wurde ein einfacher request an die OpenAI chat.completion.crate endpoint gemacht was weiter nicht kompliziert war. 
+Nach dem möglich war eine Antwort (Antwort auf irgend eine frage) vom Endpoint zu kriegen, wurde überlegt wie wir den API-Key einbauen.
+Wir haben uns dazu entschieden, dass der User den API-Key selbst mitgeben muss, dass bringt Vorteile mit sich, das der API-Key, auf unserer Seite, nirgends gespeichert werden muss.
+Auch haben wir uns mit der Obigen entscheidung gleich dagegen entschieden den Assistent, aus dem Playground, zu nutzen. 
+Assistent können nämlich nur mit dem API-Key des eigenen Account angesprochen werden.
+Da wir eher eine kleine Web-App in gedanken hatten war das natürlich völlig unsinnig. Stattdessen wird ein normales Modell (GPT 4.1 mini) angesprochen, das auch Bilder analysieren kann.
+Die meiste arbeit wurde in das erstellen von den Systemprompts gebraucht. 
+Es gibt zwei unterschiedliche Prompts einen für den fall, dass ein Thema mitgegeben wird, und der Andere für den fall, dass der User ein Bild anstelle des Themas mit gibt.
+
+
+
+
 ### Frontend
 
 ## Auswerten
