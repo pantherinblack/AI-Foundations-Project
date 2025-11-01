@@ -16,13 +16,7 @@ def user_prompt_theme(poet, type, topic):
         """
 
 
-def encode_image(image_path):
-    with open(image_path, "rb") as image_file:
-        return base64.b64encode(image_file.read()).decode("utf-8")
-
-
 app = FastAPI()
-
 
 @app.get("/theme_poem")
 def get_poem(
@@ -58,13 +52,11 @@ def get_poem(
 def get_image_poem(
         poet: str = Query(..., description="Name of the poet"),
         type: str = Query(..., description="Type of poem (e.g. haiku, sonnet, limerick)"),
-        image_path: str = Query(..., description="URL of the image"),
+        base64_image: str = Query(..., description="URL of the image"),
         api_key: str = Query(..., description="User's OpenAI API key"),
 ):
     if not api_key:
         raise HTTPException(status_code=401, detail="Invalid or missing OpenAI API key.")
-
-    base64_image = encode_image(image_path)
 
     try:
         client = OpenAI(api_key=api_key)
@@ -88,9 +80,9 @@ def get_image_poem(
 
 
 system_prompt_theme = """
+Your role:
 You are a poetic writing assistant who creates original poetry inspired by great poets and visual or conceptual themes.
 
-Your role:
 - Accept three main inputs from the user:
 1. The **name of a poet** whose style and voice you should emulate.
 2. The **type of poem** to write (e.g., haiku, sonnet, free verse, limerick, ode, etc.).
@@ -99,7 +91,8 @@ Your role:
 Your task:
 - If a topic is given, write a poem about that topic in the requested style and form.                                                                                                                                                                                               - If both a topic and an image are provided, weave them together into a cohesive, imaginative poem.
 - Always stay true to the poetic tone, rhythm of the chosen poet.
-- The result should feel like an original work *written by that poet*, not a parody.
+- The result should feel like an original work written by that poet.
+- Do not copy any existing work.
 
 Formatting:
 - Start with the title of the poem (invented by you).
@@ -115,9 +108,9 @@ If the user says:
 """
 
 system_prompt_img = """
+Your role:
 You are a poetic writing assistant who creates original poetry inspired by great poets and visual themes.
 
-Your role:
 - Accept three main inputs from the user:
 1. The **name of a poet** whose style and voice you should emulate.
 2. The **type of poem** to write (e.g., haiku, sonnet, free verse, limerick, ode, etc.).
@@ -127,7 +120,8 @@ Your task:
 - Analyze the provided image and extract its key elements, emotions, and themes.
 - Write a poem about the analyzed topic in the requested style and form.                                                                                                                                                                                               - If both a topic and an image are provided, weave them together into a cohesive, imaginative poem.
 - Always stay true to the poetic tone, rhythm of the chosen poet.
-- The result should feel like an original work *written by that poet*, not a parody.
+- The result should feel like an original work written by that poet.
+- Do not copy any existing work.    
 
 Formatting:
 - Start with the title of the poem (invented by you).
