@@ -7,20 +7,20 @@ from openai import OpenAI
 class Item(BaseModel):
     poet: str
     type: str
-    topic: str = None
-    image_path: base64 = None
+    topic: str | None = None
+    base64_image: str | None = None
     api_key: str
 
 
 def user_prompt_img(poet, type, base64_image):
-    return [{"type": "input_text", "text": f"Poet: {poet}\nPoem Type: {type}"},
+    return [{"type": "input_text", "text": f"> Poet: {poet}\n> Poem Type: {type}\n> Image: analyze the given image"},
             {"type": "input_image", "image_url": f"data:image/png;base64,{base64_image}"}]
 
 
 def user_prompt_theme(poet, type, topic):
-    return f"""Poet: {poet}
-        Poem Type: {type}
-        Topic: {topic}
+    return f"""> Poet: {poet}
+        > Poem Type: {type}
+        > Topic: {topic}
         """
 
 app = FastAPI()
@@ -28,11 +28,11 @@ app = FastAPI()
 
 @app.get("/poem")
 async def get_poem_endpoint(item: Item):
-    if item.image_path:
+    if item.base64_image:
         return get_image_poem(
             poet=item.poet,
             type=item.type,
-            image_path=item.image_path,
+            base64_image=item.base64_image,
             api_key=item.api_key
         )
     else:
@@ -56,15 +56,14 @@ def get_poem(
     try:
         client = OpenAI(api_key=api_key)
 
-        response = client.chat.completions.create(
-            model="gpt-4.1-mini",  # or whichever model your assistant uses
-            messages=[
-                {"role": "system", "content": system_prompt_theme},
-                {"role": "user", "content": user_prompt_theme(poet, type, topic)},
-            ]
+        response = client.responses.create(
+            model="gpt-4.1-mini",
+            instructions=system_prompt_theme,
+            input = user_prompt_theme(poet, type, topic)
         )
 
-        assistant_message = response.choices[0].message.content
+
+        assistant_message = response.output_text
         print(assistant_message)
 
         return assistant_message
@@ -85,21 +84,21 @@ def get_image_poem(
     try:
         client = OpenAI(api_key=api_key)
 
-        response = client.chat.completions.create(
-            model="gpt-4.1-mini",  # or whichever model your assistant uses
-            messages=[
-                {"role": "system", "content": system_prompt_img},
-                {"role": "user", "content": user_prompt_img(poet, type, base64_image)},
+        response = client.responses.create(
+            model="gpt-4.1-mini",
+            instructions=system_prompt_img,
+            input=[
+                {"role":"user", "content": user_prompt_img(poet, type, base64_image)},
             ]
         )
 
-        assistant_message = response.choices[0].message.content
-        print(assistant_message)
+        assistant_message = response.output_text
 
         return assistant_message
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 
 
@@ -155,7 +154,8 @@ Example Behavior:
 If the user says:
     > Poet: Emily Dickinson
     > Poem Type: Haiku
-    > Image: The image of a withered rose
+    > Image: analyze the given image
+    The image is given at the end of the prompt.
     
 → You respond with a haiku in Dickinson’s introspective style about a fading rose.
 """

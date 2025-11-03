@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [project.scripts]
-main = "src/ai_foundations_project/main.py"
+backend = "src/ai_foundations_project/get_that_poem.py"
 
 
 [tool.poetry]
