@@ -50,7 +50,8 @@ Wir haben uns dagegen entschieden da wir einen sehr geringen Nutzen sahen.
 Da es eine Gruppen arbeit war, wurde damit gestartet ein Git-Repository anzulegen. Für das Dependencies-Management im Backend benutzen wir Poetry und im Frontend Jarn.
 
 ### Backend
-Als erstes wurde ein einfacher request an die OpenAI chat.completion.crate endpoint gemacht was weiter nicht kompliziert war. 
+Als erstes wurde ein einfacher request an die OpenAI client.responses.create endpoint gemacht was weiter nicht kompliziert war. 
+Dieser Endpoint wird in vielen beispielen in der OpenAI Doku verwender, für Text generation und Bild analyse.
 Nach dem möglich war eine Antwort (Antwort auf irgend eine frage) vom Endpoint zu kriegen, wurde überlegt wie wir den API-Key einbauen.
 Wir haben uns dazu entschieden, dass der User den API-Key selbst mitgeben muss, dass bringt Vorteile mit sich, das der API-Key, auf unserer Seite, nirgends gespeichert werden muss.
 Auch haben wir uns mit der Obigen entscheidung gleich dagegen entschieden den Assistent, aus dem Playground, zu nutzen. 
