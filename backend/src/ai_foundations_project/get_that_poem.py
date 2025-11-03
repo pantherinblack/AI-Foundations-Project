@@ -1,7 +1,15 @@
 import base64
 
 from fastapi import FastAPI, Query, HTTPException
+from pydantic import BaseModel
 from openai import OpenAI
+
+class Item(BaseModel):
+    poet: str
+    type: str
+    topic: str = None
+    image_path: base64 = None
+    api_key: str
 
 
 def user_prompt_img(poet, type, base64_image):
@@ -15,10 +23,27 @@ def user_prompt_theme(poet, type, topic):
         Topic: {topic}
         """
 
-
 app = FastAPI()
 
-@app.get("/theme_poem")
+
+@app.get("/poem")
+async def get_poem_endpoint(item: Item):
+    if item.image_path:
+        return get_image_poem(
+            poet=item.poet,
+            type=item.type,
+            image_path=item.image_path,
+            api_key=item.api_key
+        )
+    else:
+        return get_poem(
+            poet=item.poet,
+            type=item.type,
+            topic=item.topic,
+            api_key=item.api_key
+        )
+
+
 def get_poem(
         poet: str = Query(..., description="Name of the poet"),
         type: str = Query(..., description="Type of poem (e.g. haiku, sonnet, limerick)"),
@@ -48,7 +73,6 @@ def get_poem(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/image_poem")
 def get_image_poem(
         poet: str = Query(..., description="Name of the poet"),
         type: str = Query(..., description="Type of poem (e.g. haiku, sonnet, limerick)"),
