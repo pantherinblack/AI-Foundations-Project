@@ -13,6 +13,7 @@ Der Code Interpreter wird dafür genutzt Python Code auszuführen um Daten zu an
 
 ## Ideen
 ### Kilter Assistant
+Das Kilter Board ist ein standardisiertes Trainingsboard zum Boulder.
 Ein Assistant, der Boulder-Probleme auf dem standardisierten Kilter Board erstellt.
 Der User soll einen Schwierigkeitsgrad von V0-V16 wählen. Daraufhin generiert der Assistant eine Kletterroute, indem er bestimmte Griffe auf dem Board auswählt.
 Damit der Assistant nicht irgend ein Bild generiert wird ein Bild von einem Kilter Board hinterlegt. 
