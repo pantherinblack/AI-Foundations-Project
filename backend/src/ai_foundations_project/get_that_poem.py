@@ -4,6 +4,7 @@ from fastapi import FastAPI, Query, HTTPException
 from pydantic import BaseModel
 from openai import OpenAI
 
+
 class Item(BaseModel):
     poet: str
     type: str
@@ -23,10 +24,11 @@ def user_prompt_theme(poet, type, topic):
         > Topic: {topic}
         """
 
+
 app = FastAPI()
 
 
-@app.get("/poem")
+@app.post("/poem")
 async def get_poem_endpoint(item: Item):
     if item.base64_image:
         return get_image_poem(
@@ -42,6 +44,28 @@ async def get_poem_endpoint(item: Item):
             topic=item.topic,
             api_key=item.api_key
         )
+
+
+def is_valid_input(poet, type, theme, api_key):
+    try:
+        client = OpenAI(api_key=api_key)
+
+        response = client.responses.create(
+            model="gpt-4.1-mini",
+            instructions=validate_input,
+            input = f"> Poet: {poet}\n> Poem Type: {type}\n> Topic: {theme}"
+        )
+        print("________________________________________________________________")
+        print(response)
+        assistant_message = response.output_text.strip().lower()
+
+        if assistant_message == "true":
+            return True
+        else:
+            return False
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 def get_poem(
@@ -100,6 +124,27 @@ def get_image_poem(
         raise HTTPException(status_code=500, detail=str(e))
 
 
+
+validate_input = """
+Your role:
+You are an export in the field of poetry and poetic forms.
+
+- Accept three main inputs from the user:
+1. The **name of a poet**.
+2. The **type of poem** (e.g., haiku, sonnet, free verse, limerick, ode, etc.).
+3. The **topic or theme** of the poem.
+
+Your task:
+You have to validate the three inputs provided by the user.
+- Check if the poet is a recognized poet in literary history.
+- Check if the poem type is a valid poetic form.
+- Check if the topic is appropriate.
+
+Formatting:
+- Respond with "true" if all inputs are valid.
+- Respond with "false" if any input is invalid.
+- Do not provide any additional explanations or information.
+"""
 
 
 system_prompt_theme = """
