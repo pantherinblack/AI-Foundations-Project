@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { ThemePoemTab } from "./ThemePoemTab";
 import { ImagePoemTab } from "./ImagePoemTab";
+import { BaseTab } from "./BaseTab";
 
 export function App() {
   let [tab, setTab] = React.useState(0);
@@ -41,7 +42,7 @@ export function App() {
         </Tabs>
 
         <Box display="flex" justifyContent="center">
-          {tab === 0 ? <ThemePoemTab /> : <ImagePoemTab />}
+          <BaseTab tab={tab}></BaseTab>
         </Box>
       </Container>
     </Box>
