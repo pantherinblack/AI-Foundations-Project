@@ -64,6 +64,11 @@ Als erstes wird die Rolle des Assistants definiert hier wird ihm erklärt wie er
 Danach wird dem Assistent erklärt was er mit dem Input des Users machen soll.
 Als letztes wird ihm noch gesagt wie der Output strukturiert werden soll und ein Beispiel.
 Der ganze prompt ist wie eine Anleitung aufgebaut die befolgt werden soll. Damit die Outputs möglichst ähnlich bleiben.
+#### Input Validierung
+Die KI hatte schwierigkeiten mit frei erfundenen Inputs umzugehen. Wenn ein Nutzer ein Gedichtstyp angibt der nicht existiert oder nicht existierende Wörter hält sich die KI nicht and das ausgabe Format.  
+Um dem entgegen zu wirken wurde eine Input Validierung eingebaut. Die Inputs werden auch von der KI geprüft und wenn sie nicht verstanden werden wird einfach nur "false" zurückgegeben (ansonsten "true").
+Die Validierung mittels KI bring Vorteile mit sich, da so auch Rechtschreibfehler kein problem darstellen und dem Nutzer dadurch mehr Möglichkeiten zu verfügung stehen da die Dichter nicht irgendwo fix hinterlegt sein müssen.
+Allerdings hat die Validierung mit der KI auch Nachteile, es ist schwierig zu garantieren, dass die Validierung immer korrekt funktioniert..
 
 ### Frontend
 
