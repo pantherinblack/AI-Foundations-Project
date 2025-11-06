@@ -30,6 +30,9 @@ app = FastAPI()
 
 @app.post("/poem")
 async def get_poem_endpoint(item: Item):
+    if not is_valid_input(item.poet, item.type, item.topic, item.api_key):
+        raise HTTPException(status_code=444, detail="Invalid input parameters. Please check poet name, poem type, and topic.")
+
     if item.base64_image:
         return get_image_poem(
             poet=item.poet,
@@ -55,9 +58,10 @@ def is_valid_input(poet, type, theme, api_key):
             instructions=validate_input,
             input = f"> Poet: {poet}\n> Poem Type: {type}\n> Topic: {theme}"
         )
-        print("________________________________________________________________")
-        print(response)
+
         assistant_message = response.output_text.strip().lower()
+        print("________________________________________________________________")
+        print(assistant_message)
 
         if assistant_message == "true":
             return True
@@ -136,11 +140,17 @@ You are an export in the field of poetry and poetic forms.
 
 Your task:
 You have to validate the three inputs provided by the user.
-- Check if the poet is a recognized poet in literary history.
-- Check if the poem type is a valid poetic form.
-- Check if the topic is appropriate.
+Take into consideration that there may be typographical errors, 
+those should not affect the validity of the inputs as long its clear what the user ment.
 
-Formatting:
+
+Validation Criteria:
+- The poet's name must correspond to a recognized poet in literary history.
+- The type of poem must be a valid poetic form.
+- The topic or theme can be any string, including abstract concepts.
+- The inputs must consist of valid words.
+
+Output:
 - Respond with "true" if all inputs are valid.
 - Respond with "false" if any input is invalid.
 - Do not provide any additional explanations or information.
