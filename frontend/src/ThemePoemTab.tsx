@@ -5,6 +5,7 @@ import {
   TextField,
   Typography,
   Paper,
+  Input,
 } from "@mui/material";
 import { FieldValues, useForm } from "react-hook-form";
 import { requestBackend } from "./Util";
@@ -26,6 +27,14 @@ export function ThemePoemTab() {
       style={{ display: "flex", justifyContent: "center", width: "100%" }}
     >
       <Grid container spacing={2}>
+        <Grid size={12}>
+          <TextField
+            type="password"
+            label="API-Key"
+            {...register("api_key", { required: true })}
+            fullWidth
+          />
+        </Grid>
         <Grid size={6}>
           <TextField label="Name des Poeten" {...register("poet")} fullWidth />
         </Grid>
