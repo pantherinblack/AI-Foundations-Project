@@ -5,6 +5,7 @@ import {
   Grid,
   TextField,
   Typography,
+  Paper,
 } from "@mui/material";
 import { FieldValues, useForm } from "react-hook-form";
 import { useState } from "react";
@@ -21,7 +22,6 @@ export function ImagePoemTab() {
   const [poemText, setPoemText] = useState<string>();
   const file = watch().image?.item(0);
   const image = file ? URL.createObjectURL(file) : undefined;
-  console.log(image);
 
   const submit = async (values: FieldValues) => {
     setPoemText(await requestBackend(values));
@@ -29,7 +29,7 @@ export function ImagePoemTab() {
   return (
     <form
       onSubmit={handleSubmit(submit)}
-      style={{ display: "flex", justifyContent: "center" }}
+      style={{ display: "flex", justifyContent: "center", width: "100%" }}
     >
       <Grid container spacing={2}>
         <Grid size={6}>
@@ -49,28 +49,57 @@ export function ImagePoemTab() {
             options={poemTypes}
           />
         </Grid>
+
         <Grid size={12}>
-          {image && <img src={image} alt="Selected Image" />}
-          <Button component="label" variant="outlined">
-            Bild auswählen
-            <input
-              type="file"
-              accept="image/png"
-              capture="environment"
-              style={{ height: 0, width: 0, overflow: "hidden" }}
-              {...register("image")}
-            />
-          </Button>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 2,
+              flexWrap: "wrap",
+            }}
+          >
+            {image && (
+              <Box
+                component="img"
+                src={image}
+                alt="Selected"
+                sx={{
+                  maxWidth: 240,
+                  width: "100%",
+                  height: "auto",
+                  borderRadius: 1,
+                  boxShadow: 1,
+                }}
+              />
+            )}
+            <Button component="label" variant="outlined" sx={{ height: 48 }}>
+              Bild auswählen
+              <input
+                type="file"
+                accept="image/*"
+                capture="environment"
+                style={{ display: "none" }}
+                {...register("image")}
+              />
+            </Button>
+          </Box>
         </Grid>
+
         <Grid size={12}>
-          <Button type="submit" variant="contained">
+          <Button type="submit" variant="contained" fullWidth>
             Gedicht generieren
           </Button>
         </Grid>
+
         {poemText && (
           <Grid size={12}>
-            <Typography variant="h3">Gedicht</Typography>
-            <Typography>{poemText}</Typography>
+            <Paper sx={{ p: 3 }}>
+              <Typography variant="h6" gutterBottom>
+                Gedicht
+              </Typography>
+              <Typography whiteSpace="pre-line">{poemText}</Typography>
+            </Paper>
           </Grid>
         )}
       </Grid>

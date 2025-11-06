@@ -4,6 +4,7 @@ import {
   Grid,
   TextField,
   Typography,
+  Paper,
 } from "@mui/material";
 import { FieldValues, useForm } from "react-hook-form";
 import { requestBackend } from "./Util";
@@ -22,7 +23,7 @@ export function ThemePoemTab() {
   return (
     <form
       onSubmit={handleSubmit(submit)}
-      style={{ display: "flex", justifyContent: "center" }}
+      style={{ display: "flex", justifyContent: "center", width: "100%" }}
     >
       <Grid container spacing={2}>
         <Grid size={6}>
@@ -51,15 +52,21 @@ export function ThemePoemTab() {
             label="Thema des Gedichts"
           />
         </Grid>
+
         <Grid size={12}>
-          <Button type="submit" variant="contained">
+          <Button type="submit" variant="contained" fullWidth>
             Gedicht generieren
           </Button>
         </Grid>
+
         {poemText && (
           <Grid size={12}>
-            <Typography variant="h3">Gedicht</Typography>
-            <Typography>{poemText}</Typography>
+            <Paper sx={{ p: 3 }}>
+              <Typography variant="h6" gutterBottom>
+                Gedicht
+              </Typography>
+              <Typography whiteSpace="pre-line">{poemText}</Typography>
+            </Paper>
           </Grid>
         )}
       </Grid>
