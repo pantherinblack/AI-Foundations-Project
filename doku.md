@@ -59,6 +59,8 @@ Assistent können nämlich nur mit dem API-Key des eigenen Account angesprochen 
 Da wir eher eine kleine Web-App in gedanken hatten war das natürlich völlig unsinnig. Stattdessen wird ein normales Modell (GPT 4.1 mini) angesprochen, das auch Bilder analysieren kann.
 Die meiste arbeit wurde in das erstellen von den Systemprompts gebraucht. 
 Es gibt zwei unterschiedliche Prompts einen für den fall, dass ein Thema mitgegeben wird, und der Andere für den fall, dass der User ein Bild anstelle des Themas mit gibt.
+#### Anfrage
+Wir sprechen den Endpoint 
 #### Prompt
 Als erstes wird die Rolle des Assistants definiert hier wird ihm erklärt wie er sich verhalten soll und was er verarbeiten soll.
 Danach wird dem Assistent erklärt was er mit dem Input des Users machen soll.
@@ -68,7 +70,7 @@ Der ganze prompt ist wie eine Anleitung aufgebaut die befolgt werden soll. Damit
 Die KI hatte schwierigkeiten mit frei erfundenen Inputs umzugehen. Wenn ein Nutzer ein Gedichtstyp angibt der nicht existiert oder nicht existierende Wörter hält sich die KI nicht and das ausgabe Format.  
 Um dem entgegen zu wirken wurde eine Input Validierung eingebaut. Die Inputs werden auch von der KI geprüft und wenn sie nicht verstanden werden wird einfach nur "false" zurückgegeben (ansonsten "true").
 Die Validierung mittels KI bring Vorteile mit sich, da so auch Rechtschreibfehler kein problem darstellen und dem Nutzer dadurch mehr Möglichkeiten zu verfügung stehen da die Dichter nicht irgendwo fix hinterlegt sein müssen.
-Allerdings hat die Validierung mit der KI auch Nachteile, es ist schwierig zu garantieren, dass die Validierung immer korrekt funktioniert..
+Allerdings hat die Validierung mit der KI auch Nachteile, es ist schwierig zu garantieren, dass die Validierung immer korrekt funktioniert.
 
 ### Frontend
 

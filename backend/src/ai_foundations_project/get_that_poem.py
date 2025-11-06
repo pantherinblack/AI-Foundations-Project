@@ -15,7 +15,8 @@ class Item(BaseModel):
 
 def user_prompt_img(poet, type, base64_image):
     return [{"type": "input_text", "text": f"> Poet: {poet}\n> Poem Type: {type}\n> Image: analyze the given image"},
-            {"type": "input_image", "image_url": f"data:image/png;base64,{base64_image}"}]
+            {"type": "input_image", "image_url": base64_image}
+            ]
 
 
 def user_prompt_theme(poet, type, topic):
@@ -54,7 +55,7 @@ def is_valid_input(poet, type, api_key):
         client = OpenAI(api_key=api_key)
 
         response = client.responses.create(
-            model="gpt-4.1-mini",
+            model="gpt-4o-mini",
             instructions=validate_input,
             input = f"> Poet: {poet}\n> Poem Type: {type}",
             temperature=0.0,
@@ -85,7 +86,7 @@ def get_poem(
         client = OpenAI(api_key=api_key)
 
         response = client.responses.create(
-            model="gpt-4.1-mini",
+            model="gpt-4o",
             instructions=system_prompt_theme,
             input = user_prompt_theme(poet, type, topic)
         )
@@ -113,7 +114,7 @@ def get_image_poem(
         client = OpenAI(api_key=api_key)
 
         response = client.responses.create(
-            model="gpt-4.1-mini",
+            model="gpt-4o",
             instructions=system_prompt_img,
             input=[
                 {"role":"user", "content": user_prompt_img(poet, type, base64_image)},
