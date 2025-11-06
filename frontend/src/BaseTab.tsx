@@ -35,7 +35,7 @@ async function stripBody(body: any, tab: number) {
         api_key: body.api_key,
         poet: body.poet,
         type: body.type,
-        image: await fileToBase64(body.image?.item(0)),
+        base64_image: await fileToBase64(body.image?.item(0)),
       };
 }
 
