@@ -62,13 +62,11 @@ def is_valid_input(poet, type, api_key):
         )
 
         assistant_message = response.output_text.strip().lower()
-        print("________________________________________________________________")
-        print(assistant_message)
 
-        if assistant_message == "true":
-            return True
-        else:
+        if assistant_message == "false":
             return False
+        else:
+            return True
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
