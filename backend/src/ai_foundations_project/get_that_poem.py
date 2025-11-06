@@ -30,8 +30,8 @@ app = FastAPI()
 
 @app.post("/poem")
 async def get_poem_endpoint(item: Item):
-    if not is_valid_input(item.poet, item.type, item.topic, item.api_key):
-        raise HTTPException(status_code=444, detail="Invalid input parameters. Please check poet name, poem type, and topic.")
+    if not is_valid_input(item.poet, item.type, item.api_key):
+        raise HTTPException(status_code=900, detail="Invalid input parameters. Please check poet name, poem type, and topic.")
 
     if item.base64_image:
         return get_image_poem(
@@ -49,14 +49,16 @@ async def get_poem_endpoint(item: Item):
         )
 
 
-def is_valid_input(poet, type, theme, api_key):
+def is_valid_input(poet, type, api_key):
     try:
         client = OpenAI(api_key=api_key)
 
         response = client.responses.create(
             model="gpt-4.1-mini",
             instructions=validate_input,
-            input = f"> Poet: {poet}\n> Poem Type: {type}\n> Topic: {theme}"
+            input = f"> Poet: {poet}\n> Poem Type: {type}",
+            temperature=0.0,
+            max_output_tokens=16
         )
 
         assistant_message = response.output_text.strip().lower()
@@ -136,18 +138,15 @@ You are an export in the field of poetry and poetic forms.
 - Accept three main inputs from the user:
 1. The **name of a poet**.
 2. The **type of poem** (e.g., haiku, sonnet, free verse, limerick, ode, etc.).
-3. The **topic or theme** of the poem.
 
 Your task:
 You have to validate the three inputs provided by the user.
 Take into consideration that there may be typographical errors, 
 those should not affect the validity of the inputs as long its clear what the user ment.
 
-
 Validation Criteria:
 - The poet's name must correspond to a recognized poet in literary history.
 - The type of poem must be a valid poetic form.
-- The topic or theme can be any string, including abstract concepts.
 - The inputs must consist of valid words.
 
 Output:
