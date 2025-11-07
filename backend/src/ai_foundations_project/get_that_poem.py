@@ -1,8 +1,10 @@
 import base64
+from io import BytesIO
 
 from fastapi import FastAPI, Query, HTTPException
 from pydantic import BaseModel
 from openai import OpenAI
+from gtts import gTTS
 
 
 class Item(BaseModel):
@@ -32,7 +34,8 @@ app = FastAPI()
 @app.post("/poem")
 async def get_poem_endpoint(item: Item):
     if not is_valid_input(item.poet, item.type, item.api_key):
-        raise HTTPException(status_code=900, detail="Invalid input parameters. Please check poet name, poem type, and topic.")
+        raise HTTPException(status_code=900,
+                            detail="Invalid input parameters. Please check poet name, poem type, and topic.")
 
     if item.base64_image:
         return get_image_poem(
@@ -57,7 +60,7 @@ def is_valid_input(poet, type, api_key):
         response = client.responses.create(
             model="gpt-4o-mini",
             instructions=validate_input,
-            input = f"> Poet: {poet}\n> Poem Type: {type}",
+            input=f"> Poet: {poet}\n> Poem Type: {type}",
             temperature=0.0,
             max_output_tokens=16
         )
@@ -88,14 +91,13 @@ def get_poem(
         response = client.responses.create(
             model="gpt-4o",
             instructions=system_prompt_theme,
-            input = user_prompt_theme(poet, type, topic)
+            input=user_prompt_theme(poet, type, topic)
         )
-
 
         assistant_message = response.output_text
         print(assistant_message)
 
-        return assistant_message
+        return {"text": assistant_message, "audio": tts(assistant_message)}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -117,18 +119,25 @@ def get_image_poem(
             model="gpt-4o",
             instructions=system_prompt_img,
             input=[
-                {"role":"user", "content": user_prompt_img(poet, type, base64_image)},
+                {"role": "user", "content": user_prompt_img(poet, type, base64_image)},
             ]
         )
 
         assistant_message = response.output_text
 
-        return assistant_message
+        return {"text": assistant_message, "audio": tts(assistant_message)}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
+def tts(assistant_message):
+    audio_bytes = BytesIO()
+    gTTS(assistant_message).write_to_fp(audio_bytes)
+    audio_bytes.seek(0)
+    audio_data = audio_bytes.read()
+    audio_base64 = base64.b64encode(audio_data).decode('utf-8')
+    return audio_base64
 
 validate_input = """
 Your role:
@@ -153,7 +162,6 @@ Output:
 - Respond with "false" if any input is invalid.
 - Do not provide any additional explanations or information.
 """
-
 
 system_prompt_theme = """
 Your role:
@@ -212,3 +220,6 @@ If the user says:
     
 → You respond with a haiku in Dickinson’s introspective style about a fading rose.
 """
+
+
+
