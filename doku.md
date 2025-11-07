@@ -19,7 +19,10 @@ Der User soll einen Schwierigkeitsgrad von V0-V16 wählen. Daraufhin generiert d
 Damit der Assistant nicht irgend ein Bild generiert wird ein Bild von einem Kilter Board hinterlegt. 
 Das Ergebnis wäre dann das mitgegebene Bild mit den ausgewählten Griffen umkreist.
 
-Bilder!!!!!
+| Original    | Generated |
+| -------- | ------- |
+| <img src="kilterboard.jpeg" width="200"> | <img src="kilterboard_generated.png" width="200"> |
+
 
 #### Auswertung
 Das Kilter Board wird weltweit genutzt und ist wie schon erwähnt standardisiert. Deshalb könnte der Assistant wirklich benutzt werden.
@@ -42,40 +45,115 @@ Der Assistant der beliebige Texte und Files so umschreibt, als ob Yoda (aus Star
 Man gibt der KI einfach eine Text-Datei oder ein Text und Bekommt einen Text raus der von Yoda geschrieben wurde.
 
 #### Auswertung
-Die Idee fanden wir lustig. Die technische Umsetzung währe gut möglich gewesen und hätte interessante Aspect wie das Auslesen und Schreibe von Dateien beinhalted.
+Die Idee fanden wir lustig. Die technische Umsetzung währe gut möglich gewesen und hätte interessante Aspect wie das Auslesen und Schreibe von Dateien beinhaltet.
 Wir haben uns dagegen entschieden da wir einen sehr geringen Nutzen sahen.
 
 ## Umsetzen
-### Setup
-Da es eine Gruppen arbeit war, wurde damit gestartet ein Git-Repository anzulegen. Für das Dependencies-Management im Backend benutzen wir Poetry und im Frontend Jarn.
 
 ### Backend
-Als erstes wurde ein einfacher request an die OpenAI client.responses.create endpoint gemacht was weiter nicht kompliziert war. 
-Dieser Endpoint wird in vielen beispielen in der OpenAI Doku verwender, für Text generation und Bild analyse.
-Nach dem möglich war eine Antwort (Antwort auf irgend eine frage) vom Endpoint zu kriegen, wurde überlegt wie wir den API-Key einbauen.
-Wir haben uns dazu entschieden, dass der User den API-Key selbst mitgeben muss, dass bringt Vorteile mit sich, das der API-Key, auf unserer Seite, nirgends gespeichert werden muss.
-Auch haben wir uns mit der Obigen entscheidung gleich dagegen entschieden den Assistent, aus dem Playground, zu nutzen. 
-Assistent können nämlich nur mit dem API-Key des eigenen Account angesprochen werden.
-Da wir eher eine kleine Web-App in gedanken hatten war das natürlich völlig unsinnig. Stattdessen wird ein normales Modell (GPT 4o) angesprochen, das auch Bilder analysieren kann.
-Die meiste arbeit wurde in das erstellen von den Systemprompts gebraucht. 
-Es gibt zwei unterschiedliche Prompts einen für den fall, dass ein Thema mitgegeben wird, und der Andere für den fall, dass der User ein Bild anstelle des Themas mit gibt.
-#### Anfrage
-Wir sprechen den Endpoint
-#### Prompt
-Als erstes wird die Rolle des Assistants definiert hier wird ihm erklärt wie er sich verhalten soll und was er verarbeiten soll.
-Danach wird dem Assistent erklärt was er mit dem Input des Users machen soll.
-Als letztes wird ihm noch gesagt wie der Output strukturiert werden soll und ein Beispiel.
-Der ganze prompt ist wie eine Anleitung aufgebaut die befolgt werden soll. Damit die Outputs möglichst ähnlich bleiben.
-#### Input Validierung
-Die KI hatte schwierigkeiten mit frei erfundenen Inputs umzugehen. Wenn ein Nutzer ein Gedichtstyp oder Poet angibt der nicht existiert oder gar ein nicht existierendes Wort, hält sich die KI nicht and das ausgabe Format.  
-Um dem entgegen zu wirken wurde eine Input Validierung eingebaut. Die Inputs werden auch von der KI geprüft und wenn sie nicht verstanden werden wird einfach nur "false" zurückgegeben (ansonsten "true").
-Um der KI so wenig spielraum wie möglich zu geben limitieren wir die Temperature auf 0.0 (deterministische Antworten) und
-die maximale Anzahl an Output Tokens auf das zugelassene minimum von 16 (gewünscht währe 1 oder 2 damit nur ein Wort zurückgegeben werden kann).
-Da wir ...... ggrund für model
-Die Validierung mittels KI bring Vorteile mit sich, da so auch Rechtschreibfehler kein problem darstellen und
-dem Nutzer dadurch mehr Möglichkeiten zu verfügung stehen da die Dichter nicht irgendwo fix hinterlegt sein müssen.
-Allerdings hat die Validierung mit der KI auch Nachteile, es ist schwierig zu garantieren, dass die Validierung immer korrekt funktioniert.
+Als erstes wurde ein einfacher request an die OpenAI client.responses.create endpoint gemacht was sich als unkompliziert erwies. 
+Dieser Endpoint wird in vielen beispielen in der OpenAI Dokumentation für Text generation und Bild analyse verwendet.
+Nach dem es möglich war, erfolgreich eine Antwort vom Endpoint zu erhalten, haben wir überlegt wie wir den API-Key einbauen.
+Schlussendlich wurde entschieden, dass der User den API-Key selbst mitgeben muss. Das hat den Vorteil, dass der API-Key auf Seiten der Applikation nicht hinterlegt wird.
+Durch diese Entscheidung haben wir uns bewusst auch dagegen entschieden einen Assistent, aus dem Playground, zu nutzen. 
+Ein weiterer grund keinen Assistent zu nutzen war, dass Assistents nur mit dem API-Key des eigenen Accounts angesprochen werden können.
+Stattdessen wird ein normales Modell (GPT 4o) angesprochen. Das Model 4o eignet sich besonders für kreative Aufgaben und kann auch Bilder analysieren.
 
+#### Prompt
+Die meiste arbeit wurde in das erstellen von den Systemprompts/Instructions gesteckt. 
+Es gibt zwei unterschiedliche Prompts einen für den fall, dass ein Thema mitgegeben wird, und der Andere für den fall, dass der User ein Bild anstelle des Themas mit gibt.
+
+Zunächst wird die Rolle der KI definiert, in der festgelegt ist wie sich die KI zu verhalten hat und was sie verarbeiten soll.
+Danach wird der KI erklärt was sie mit den Inputs des Users machen soll.
+Als letztes wird noch festgelegt wie der Output strukturiert sein soll und es wird ein Beispiel gegeben.
+Der ganze prompt ist als Anleitung aufgebaut, die befolgt werden soll. Damit sollen konsistente Ergebnisse erzielt werden.
+```python
+system_prompt_theme = """
+Your role:
+You are a poetic writing assistant who creates original poetry inspired by great poets and visual or conceptual themes.
+
+- Accept three main inputs from the user:
+1. The <name of a poet> whose style and voice you should emulate.
+2. The <type of poem> to write (e.g., haiku, sonnet, free verse, limerick, ode, etc.).
+3. The <topic or theme> of the poem.
+
+Your task:
+- If a topic is given, write a poem about that topic in the requested style and form.
+- Always stay true to the poetic tone, rhythm of the chosen poet.
+- The result should feel like an original work written by that poet.
+- Do not copy any existing work.
+
+Formatting:
+- Start with the title of the poem (invented by you).
+- Then present the poem itself, properly formatted.
+
+Example Behavior:
+If the user says:
+    > Poet: Emily Dickinson
+    > Poem Type: Haiku
+    > Topic: A withered rose
+    
+→ You respond with a haiku in Dickinson’s introspective style about a fading rose.
+"""
+```
+#### Anfrage
+Wir sprechen den Endpoint OpenAI.responses.create an. Wir haben uns für das Model gpt-4o entschieden es soll gut für kreative Aufgaben sein und kann auch Bilder verarbeiten.
+In dem feld "instructions" geben wir Anweisungen mit was das Model mit den vom User mitgegebenen Werten anstellen soll und wie der Output aussehen soll. 
+Wir belassen die Temperature (determinismus Wert) hierbei auf dem standard Wert (0.7), was eine gute Balance zu sein scheint.
+```python
+client = OpenAI(api_key=api_key)
+        
+response = client.responses.create(
+            model="gpt-4o",
+            instructions=system_prompt_theme,
+            input=user_prompt_theme(poet, type, topic)
+        )
+```
+#### Input Validierung
+Das Model zeigt Schwierigkeiten mit frei erfundenen Inputs oder wenn nicht existierende Gedichttypen angegeben werden.
+Die Problemen zeigen sich im Output format das nicht eingehalten wird.
+Um dem entgegen zu wirken wurde eine Input Validierung eingebaut. Die Inputs werden auch von der KI geprüft. Wenn die Inputs nicht verstanden werden wird schlicht "false" zurückgegeben (ansonsten "true").
+Um der KI so wenig spielraum wie möglich zu geben reduzieren wir die Temperature auf 0.0 (deterministische Antworten) und
+die maximale Anzahl an Output Tokens auf das zugelassene minimum von 16 (wünschenswert wären 1 oder 2 Tokens). Die Tokenlimitierung bewirkt, dass nur so wenig Text wie möglich zurückgegeben werden kann. 
+Da wir für die Validierung keine komplexen anforderungen haben reicht es wenn wir ein kleineres, günstigeres und schnelleres Model ansprechen. Wir nutzen hier das gpt-4o-mini.
+
+Die Validierung mittels KI bring den Vorteile mit sich, dass so auch Rechtschreibfehler kein problem darstellen.
+Auch hat der Nutzer dadurch mehr Möglichkeiten verschiedene Dichter anzugeben da es keine fixe Liste geben muss.
+```python
+def is_valid_input(poet, type, api_key):
+    try:
+        client = OpenAI(api_key=api_key)
+
+        response = client.responses.create(
+            model="gpt-4o-mini",
+            instructions=validate_input,
+            input=f"> Poet: {poet}\n> Poem Type: {type}",
+            temperature=0.0,
+            max_output_tokens=16
+        )
+
+        assistant_message = response.output_text.strip().lower()
+
+        if assistant_message == "false":
+            return False
+        else:
+            return True
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+```
+
+#### Text to Speech
+Als zusätzliches Feature haben wir eine Text-to-Speech Funktion integriert, damit man sich das generierte Gedicht vorlesen lasse kann. Dazu nutzen wir die Google Text-to-Speech library (gTTS).
+```python
+def tts(assistant_message):
+    audio_bytes = BytesIO()
+    gTTS(assistant_message).write_to_fp(audio_bytes)
+    audio_bytes.seek(0)
+    audio_data = audio_bytes.read()
+    audio_base64 = base64.b64encode(audio_data).decode('utf-8')
+    return audio_base64
+```
 ### Frontend
 
 ## Auswerten
