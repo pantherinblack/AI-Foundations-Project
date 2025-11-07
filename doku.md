@@ -56,20 +56,24 @@ Nach dem möglich war eine Antwort (Antwort auf irgend eine frage) vom Endpoint 
 Wir haben uns dazu entschieden, dass der User den API-Key selbst mitgeben muss, dass bringt Vorteile mit sich, das der API-Key, auf unserer Seite, nirgends gespeichert werden muss.
 Auch haben wir uns mit der Obigen entscheidung gleich dagegen entschieden den Assistent, aus dem Playground, zu nutzen. 
 Assistent können nämlich nur mit dem API-Key des eigenen Account angesprochen werden.
-Da wir eher eine kleine Web-App in gedanken hatten war das natürlich völlig unsinnig. Stattdessen wird ein normales Modell (GPT 4.1 mini) angesprochen, das auch Bilder analysieren kann.
+Da wir eher eine kleine Web-App in gedanken hatten war das natürlich völlig unsinnig. Stattdessen wird ein normales Modell (GPT 4o) angesprochen, das auch Bilder analysieren kann.
 Die meiste arbeit wurde in das erstellen von den Systemprompts gebraucht. 
 Es gibt zwei unterschiedliche Prompts einen für den fall, dass ein Thema mitgegeben wird, und der Andere für den fall, dass der User ein Bild anstelle des Themas mit gibt.
 #### Anfrage
-Wir sprechen den Endpoint 
+Wir sprechen den Endpoint
 #### Prompt
 Als erstes wird die Rolle des Assistants definiert hier wird ihm erklärt wie er sich verhalten soll und was er verarbeiten soll.
 Danach wird dem Assistent erklärt was er mit dem Input des Users machen soll.
 Als letztes wird ihm noch gesagt wie der Output strukturiert werden soll und ein Beispiel.
 Der ganze prompt ist wie eine Anleitung aufgebaut die befolgt werden soll. Damit die Outputs möglichst ähnlich bleiben.
 #### Input Validierung
-Die KI hatte schwierigkeiten mit frei erfundenen Inputs umzugehen. Wenn ein Nutzer ein Gedichtstyp angibt der nicht existiert oder nicht existierende Wörter hält sich die KI nicht and das ausgabe Format.  
+Die KI hatte schwierigkeiten mit frei erfundenen Inputs umzugehen. Wenn ein Nutzer ein Gedichtstyp oder Poet angibt der nicht existiert oder gar ein nicht existierendes Wort, hält sich die KI nicht and das ausgabe Format.  
 Um dem entgegen zu wirken wurde eine Input Validierung eingebaut. Die Inputs werden auch von der KI geprüft und wenn sie nicht verstanden werden wird einfach nur "false" zurückgegeben (ansonsten "true").
-Die Validierung mittels KI bring Vorteile mit sich, da so auch Rechtschreibfehler kein problem darstellen und dem Nutzer dadurch mehr Möglichkeiten zu verfügung stehen da die Dichter nicht irgendwo fix hinterlegt sein müssen.
+Um der KI so wenig spielraum wie möglich zu geben limitieren wir die Temperature auf 0.0 (deterministische Antworten) und
+die maximale Anzahl an Output Tokens auf das zugelassene minimum von 16 (gewünscht währe 1 oder 2 damit nur ein Wort zurückgegeben werden kann).
+Da wir ...... ggrund für model
+Die Validierung mittels KI bring Vorteile mit sich, da so auch Rechtschreibfehler kein problem darstellen und
+dem Nutzer dadurch mehr Möglichkeiten zu verfügung stehen da die Dichter nicht irgendwo fix hinterlegt sein müssen.
 Allerdings hat die Validierung mit der KI auch Nachteile, es ist schwierig zu garantieren, dass die Validierung immer korrekt funktioniert.
 
 ### Frontend
