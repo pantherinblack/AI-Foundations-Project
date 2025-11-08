@@ -19,8 +19,8 @@ Der User soll einen Schwierigkeitsgrad von V0-V16 wählen. Daraufhin generiert d
 Damit der Assistant nicht irgend ein Bild generiert wird ein Bild von einem Kilter Board hinterlegt. 
 Das Ergebnis wäre dann das mitgegebene Bild mit den ausgewählten Griffen umkreist.
 
-| Original    | Generated |
-| -------- | ------- |
+| Original                                 | Generated                                         |
+|------------------------------------------|---------------------------------------------------|
 | <img src="kilterboard.jpeg" width="200"> | <img src="kilterboard_generated.png" width="200"> |
 
 
@@ -99,7 +99,7 @@ If the user says:
 #### Anfrage
 Wir sprechen den Endpoint OpenAI.responses.create an. Wir haben uns für das Model gpt-4o entschieden es soll gut für kreative Aufgaben sein und kann auch Bilder verarbeiten.
 In dem feld "instructions" geben wir Anweisungen mit was das Model mit den vom User mitgegebenen Werten anstellen soll und wie der Output aussehen soll. 
-Wir belassen die Temperature (determinismus Wert) hierbei auf dem standard Wert (0.7), was eine gute Balance zu sein scheint.
+Wir belassen die Temperature (determinismus Wert) hierbei auf dem standard Wert (0.7), was nach unseren Tests, eine gute Balance zu sein scheint.
 ```python
 client = OpenAI(api_key=api_key)
         
@@ -115,9 +115,9 @@ Die Problemen zeigen sich im Output format das nicht eingehalten wird.
 Um dem entgegen zu wirken wurde eine Input Validierung eingebaut. Die Inputs werden auch von der KI geprüft. Wenn die Inputs nicht verstanden werden wird schlicht "false" zurückgegeben (ansonsten "true").
 Um der KI so wenig spielraum wie möglich zu geben reduzieren wir die Temperature auf 0.0 (deterministische Antworten) und
 die maximale Anzahl an Output Tokens auf das zugelassene minimum von 16 (wünschenswert wären 1 oder 2 Tokens). Die Tokenlimitierung bewirkt, dass nur so wenig Text wie möglich zurückgegeben werden kann. 
-Da wir für die Validierung keine komplexen anforderungen haben reicht es wenn wir ein kleineres, günstigeres und schnelleres Model ansprechen. Wir nutzen hier das gpt-4o-mini.
+Da wir für die Validierung keine komplexen anforderungen haben reicht es, wenn wir ein kleineres, günstigeres und schnelleres Model ansprechen. Wir nutzen hier das gpt-4o-mini.
 
-Die Validierung mittels KI bring den Vorteile mit sich, dass so auch Rechtschreibfehler kein problem darstellen.
+Die Validierung mittels KI bring die Vorteile mit sich, dass so auch Rechtschreibfehler kein problem darstellen.
 Auch hat der Nutzer dadurch mehr Möglichkeiten verschiedene Dichter anzugeben da es keine fixe Liste geben muss.
 ```python
 def is_valid_input(poet, type, api_key):
@@ -154,7 +154,40 @@ def tts(assistant_message):
     audio_base64 = base64.b64encode(audio_data).decode('utf-8')
     return audio_base64
 ```
+
 ### Frontend
+Das Frontend wurde mit Typescript und dem Framework React umgesetzt.
+Da man mit React nur schlecht ein Modernes design umsetzen kann, wurde [Material UI (MUI)](https://mui.com/material-ui/) verwendet.
+
+#### Design
+MUI verwendet das Material Design von Google, welches ein recht modernes und einfach verständliches design bietet.
+Das Standard theme von MUI wurde nicht angepasst, da es für ein kleines Projekt ausreichend ist.
+
+Das Backend unterstützt zwei möglichkeiten um Gedicht zu generieren. Diese werden mithilfe von zwei Tabs dargestellt.
+Standardmässig kann der Benutzer eine beschreibung des Themas eingeben. Bei Bedarf kann man den Tab wechseln, um ein Bild hochzuladen.
+
+MUI ist auch für Mobilgeräte optimiert, was es ein Kinderspiel gemacht hat auch eine gut verwendbares mobile design hinzubekommen.
+
+#### Eingaben
+Der Benutzer kann mittels mehrerer Input felder die folgenden Daten eingeben:
+- API Key
+- Name des Poeten
+- Typ des Gedichts
+
+Für den APi Ke wird ein Passwort feld verwendet, damit der Key nicht sichtbar ist.
+Für den Typ des Gedichts verwenden wir ein Free solo Dropdown mit Autocomplete. Übersetzt bedeutet das,
+man hat eine Suchleiste mit Vorschlägen, kann jedoch seine eigenen verwenden.
+
+Je nach den Tab, kann man anschliessend noch in ein multiline Textfeld da Thema genauer spezifizieren oder ein Bild hochladen.
+Das Bild wird auch direkt als vorschau dargestellt, damit man nicht aus Versehen das falsche auswählt.
+Sollte das ganze von einem Handy (oder Ähnlichem) benutzt werden, hat man auch die Option direkt mit der Kamera App ein Bild aufzunehmen.
+
+#### Ausgabe des Textes
+Nachdem man `Genereiern` gedrückt hat, beginnt die generierung des Textes, sowie die der Text to Speech (TTS) Audiodatei.
+Nach dessen abschluss werden die letzten Ergebnisse unter dem Formular als formatiertes Markdown angezeigt.
+Auch hat man die Möglichkeit die TTS Audiodatei abspielen zu lassen, für den fall, dass man eine lange Ballade nicht selbst vorlesen möchte.
+
+[//]: # (TODO Bilder hinzufügen)
 
 ## Auswerten
 
