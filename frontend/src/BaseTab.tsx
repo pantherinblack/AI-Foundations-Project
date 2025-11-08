@@ -12,6 +12,7 @@ import React, { ReactNode, useRef, useState } from "react";
 import { apiResponse, requestBackend } from "./Util";
 import { ThemePoemTab } from "./ThemePoemTab";
 import { ImagePoemTab } from "./ImagePoemTab";
+import Markdown from "react-markdown";
 
 const poemTypes = ["Ballade", "Hymne", "Ode", "Haiku", "Sonett", "Limerick"];
 
@@ -118,7 +119,7 @@ export function BaseTab({ tab }: { tab: number }) {
                   ></audio>
                 </Button>
               </Box>
-              <Typography whiteSpace="pre-line">{poem.text}</Typography>
+              <Markdown>{poem.text}</Markdown>
             </Paper>
           </Grid>
         )}
