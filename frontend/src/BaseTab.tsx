@@ -1,5 +1,6 @@
 import {
   Autocomplete,
+  Box,
   Button,
   Grid,
   Paper,
@@ -7,8 +8,8 @@ import {
   Typography,
 } from "@mui/material";
 import { FieldValues, useForm } from "react-hook-form";
-import React, { ReactNode, useState } from "react";
-import { requestBackend } from "./Util";
+import React, { ReactNode, useRef, useState } from "react";
+import { apiResponse, requestBackend } from "./Util";
 import { ThemePoemTab } from "./ThemePoemTab";
 import { ImagePoemTab } from "./ImagePoemTab";
 
@@ -41,10 +42,11 @@ async function stripBody(body: any, tab: number) {
 
 export function BaseTab({ tab }: { tab: number }) {
   const { register, handleSubmit, watch } = useForm();
-  const [poemText, setPoemText] = useState<string>();
+  const [poem, setPoem] = useState<apiResponse>();
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   const submit = async (values: FieldValues) => {
-    setPoemText(await requestBackend(await stripBody(values, tab)));
+    setPoem(await requestBackend(await stripBody(values, tab)));
   };
 
   return (
@@ -90,13 +92,33 @@ export function BaseTab({ tab }: { tab: number }) {
           </Button>
         </Grid>
 
-        {poemText && (
+        {poem && (
           <Grid size={12}>
             <Paper sx={{ p: 3 }}>
-              <Typography variant="h6" gutterBottom>
-                Gedicht
-              </Typography>
-              <Typography whiteSpace="pre-line">{poemText}</Typography>
+              <Box
+                gap={2}
+                mb={2}
+                display="flex"
+                justifyContent="space-between"
+                width="100%"
+              >
+                <Typography variant="h6" gutterBottom>
+                  Gedicht
+                </Typography>
+                <Button
+                  variant="outlined"
+                  onClick={() => {
+                    audioRef.current?.play();
+                  }}
+                >
+                  Vorlesen
+                  <audio
+                    ref={audioRef}
+                    src={`data:audio/mpeg;base64,${poem.audio}`}
+                  ></audio>
+                </Button>
+              </Box>
+              <Typography whiteSpace="pre-line">{poem.text}</Typography>
             </Paper>
           </Grid>
         )}
