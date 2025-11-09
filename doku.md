@@ -70,7 +70,7 @@ Der ganze prompt ist als Anleitung aufgebaut, die befolgt werden soll. Damit sol
 ### Anfrage
 Wir sprechen den Endpoint OpenAI.responses.create an. Wir haben uns für das Model gpt-4o entschieden es soll gut für kreative Aufgaben sein und kann auch Bilder verarbeiten.
 In dem feld "instructions" geben wir Anweisungen womit das Model mit den vom User mitgegebenen Werten anstellen soll und wie der Output aussehen soll. 
-Wir belassen die Temperature (determinismus Wert) hierbei auf dem standard Wert (0.7), was nach unseren Tests, eine gute Balance zu sein scheint.
+Wir belassen die Temperature (determinismus Wert) hierbei auf dem standard Wert (1), was nach unseren Tests, eine gute Balance zu sein scheint.
 
 *Python code der Anfrage an den OpenAI-Endpoint*
 ### Input Validierung
