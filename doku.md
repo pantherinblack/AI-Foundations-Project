@@ -74,7 +74,7 @@ Wir belassen die Temperature (determinismus Wert) hierbei auf dem standard Wert 
 
 *Python code der Anfrage an den OpenAI-Endpoint*
 ### Input Validierung
-Das Model zeigt Schwierigkeiten mit frei erfundenen Inputs oder wenn nicht existierende Gedichttypen angegeben werden.
+Das Model zeigt Schwierigkeiten mit frei erfundenen Inputs oder wenn nicht existierende Gedichttypn angegeben werden.
 Die Probleme zeigen sich im Output format das nicht eingehalten wird.
 Um dem entgegenzuwirken wurde eine Input Validierung eingebaut. Die Inputs werden auch von der KI geprüft. Wenn die Inputs nicht verstanden werden wird schlicht "false" zurückgegeben (ansonsten "true").
 Um der KI so wenig spielraum wie möglich zu geben, reduzieren wir die Temperature auf 0.0 (deterministische Antworten) und
@@ -99,7 +99,7 @@ response = client.responses.create(
 Als zusätzliches Feature haben wir eine Text-to-Speech Funktion integriert, damit man sich das generierte Gedicht vorlesen lassen kann. Dazu nutzen wir die [Google Text-to-Speech library (gTTS)](https://pypi.org/project/gTTS/).
 
 ## Frontend
-Das Frontend wurde mit Typescript und dem Framework React umgesetzt.
+Das Frontend wurde mit Typscript und dem Framework React umgesetzt.
 Da man mit React nur schlecht ein Modernes design umsetzen kann, wurde [Material UI (MUI)](https://mui.com/material-ui/) verwendet.
 
 ### Design
@@ -133,12 +133,12 @@ Auch hat man die Möglichkeit die TTS Audiodatei abspielen zu lassen, für den F
 [//]: # (TODO Bilder hinzufügen)
 
 # Auswertung
-Die Umsetzung des Projektes war erfolgreich. Es ist möglich, Gedichte zu generieren, die die angegebenen Spezifikationen, wir Thema/Bild und Gedichttype einhalten. 
-Den Poeten wiederspiegeln ist aus mehreren gründen schwierig. Erstens, viele Poeten haben einen ähnlichen Style oder den Style eines anderen Poeten angenommen. 
-Zweitens, manche Poeten haben nur wenige oder keine Gedichte eines gewissen Types geschrieben.
+Die Umsetzung des Projektes war erfolgreich. Es ist möglich, Gedichte zu generieren, die die angegebenen Spezifikationen, wie Thema/Bild und Gedichttyp einhalten. 
+Den Poeten wiederspiegeln ist aus mehreren Gründen schwierig. Erstens, viele Poeten haben einen ähnlichen Style oder den Style eines anderen Poeten angenommen. 
+Zweitens, manche Poeten haben nur wenige oder keine Gedichte eines gewissen Typs geschrieben.
 Durch die Validierung der Inputs wird der KI das Generieren eines Gedichts erleichter da keine sinnlosen Inputs verarbeitet werden.
-Das Frontend ist schlicht aber intuitiv und ermöglicht eine einfache Nutzung der Applikation sowohl auf einem Computer als auch mit dem Handy.
+Das Frontend ist schlicht aber intuitiv und ermöglicht eine einfache Nutzung der Applikation sowohl auf einem Computer als auch auf dem Handy.
 
-Interessant für uns war wie viele Einstellungen man bei einem Request an die OpenAI-API machen kann (temperature, top_p, ...) und wie stark diese Einstellungen den Output beeinflussen.
+Interessant für uns war, wie viele Einstellungen man bei einem Request an die OpenAI-API machen kann (temperature, top_p, ...) und wie stark diese Einstellungen den Output beeinflussen.
 Auch eine relevante erkenntnis ist, dass ein klar strukturierter Prompt und Instruktionen der KI enorm helfen einen konsistenten Output zu generieren, vor allem auch Sachen zu definieren, die nicht gemacht werden sollen hat extrem geholfen.
-Sehr interessant zu sehen war, dass unterschiedliche Models für unterschiedliche Aufgaben besser geeignet waren, z.B. haben wir Anfangs das gpt-4-mini genutzt, was Probleme hatte die Dichter zu interpretieren.
+Sehr interessant zu sehen war, dass unterschiedliche Modelle für unterschiedliche Aufgaben besser geeignet waren, z.B. haben wir anfangs das GPT-4-mini genutzt, was Probleme hatte die Dichter zu interpretieren.
