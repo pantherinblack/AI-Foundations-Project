@@ -1,56 +1,53 @@
-# Doku
-
-##  Technische Möglichkeiten von GPT Assistenten
-https://chatgpt.com/share/68f8c433-f834-800c-bc17-439c498e033b
-### System Instructions
+#  Technische Möglichkeiten von GPT Assistenten
+## System Instructions
 Die System Instructions können genutzt werden, um dem Assistant einen groben Rahmen zu geben, wie er sich verhalten soll, wie Tief ins Detail er mit seinen Antworten gehen soll und für welches Themenfeld er geschaffen ist.
-### Files / File Search
+## Files / File Search
 Man kann dem Assistenten Textdateien hochladen damit er damit arbeiten kann. Der Assistant kann die Dateien, als Wissensquelle nutzen, um Themen über die er nicht viele informational hätte besser zu verstehen und spezifische Antworten zu geben.
-### Code Interpreter
+## Code Interpreter
 Der Code Interpreter wird dafür genutzt Python Code auszuführen, um Daten zu analysieren, Diagramme zu erstellen oder Berechnungen durchzuführen. Der Assistenten schreibt dann Python Code, um das resultat des Ausgeführten codes dem Nutzer auszugeben.
 ### Functions
 Über Functions kann ein Assistent mit externen Systemen kommunizieren, oder man kann sich zurückgegebenen Daten strukturieren lassen. Das heisst der Assistant kann selbst API-Abfragen machen und die rückgabe verarbeiten.
 
-## Ideen
-### Kilter Assistant
+# Ideen
+## Kilter Assistant
 Das Kilter Board ist ein standardisiertes Trainingsboard zum Boulder.
 Ein Assistant, der Boulder-Probleme auf dem standardisierten Kilter Board erstellt.
 Der User soll einen Schwierigkeitsgrad von V0-V16 wählen. Daraufhin generiert der Assistant eine Kletterroute, indem er bestimmte Griffe auf dem Board auswählt.
 Damit der Assistant nicht irgendein Bild generiert wird ein Bild von einem Kilter Board hinterlegt. 
 Das Ergebnis wäre dann das mitgegebene Bild mit den ausgewählten Griffen umkreist.
 
-| Original                                 | Generated                                         |
-|------------------------------------------|---------------------------------------------------|
-| <img src="kilterboard.jpeg" width="200"> | <img src="kilterboard_generated.png" width="200"> |
+| *Kilter-Board Griffset*                            | *Generierter Boudler auf einem Kilter-Board*      |
+|----------------------------------------------------|---------------------------------------------------|
+| <img src="kilterboard.jpeg" width="200">           | <img src="kilterboard_generated.png" width="200"> |
 
-
-#### Auswertung
-Das Kilter Board wird weltweit genutzt und ist wie schon erwähnt standardisiert. Deshalb könnte der Assistant wirklich benutzt werden.
-Allerdings hat sich beim Testen, im OpenAI Playground, herausgestellt, dass das Bearbeiten von Bildern nicht gut funktioniert.
-Auch die einschätzung des Schwierigkeitsgrades ist schwer da man auf Bildern nicht gut erkennt wie gut ein Griff ist.
-Daher haben wir uns schlussendlich gegen die Idee entschieden.
-
-### Dichter
+## Dichter
 Die Idee hierbei ist, dass der Assistant ein Gedicht auf basis eines Dichters, eines Gedichttyps und eines Themas oder Bildes schreibt.
 Zum Beispiel kann der Nutzer "Goethe", "Sonett" und "Wolf" angeben, daraufhin generiert der Assistant ein neues Sonett über einen Wolf im Stil von Goethe.
 Wenn man alternativ ein Bild anstelle von einem Thema mitgibt, wird das Thema aus dem Bild heraus analysiert.
 
-#### Auswertung
-Diese Idee fanden wir besonders Geeignet für das Project da sowohl Text als auch Bild verwendet werden. Auch der Umsetzung stand Technisch nichts im Weg.
-Bilder können gut analysiert werden und es gibt viele Gedichte von unterschiedlichen Dichtern. 
-Schwierigkeiten könnten allerdings auftreten, wenn der gewählte Dichter nie in der angegebenen Gedichtform geschrieben hat, da der Stiel dann stark abweichen könnt.
 
-### Yoda
+## Yoda
 Ein Assistant, der beliebige Texte und Files so umschreibt, als ob Yoda (aus Star Wars) sie geschrieben hätte.
 Man gibt der KI einfach eine Text-Datei oder ein Text und bekommt einen Text raus der von Yoda geschrieben wurde.
 
-#### Auswertung
-Die Idee fanden wir lustig. Die technische Umsetzung währe gut möglich gewesen und hätte interessante Aspect wie das Auslesen und Schreibe von Dateien beinhaltet.
-Wir haben uns dagegen entschieden da wir einen sehr geringen Nutzen sahen.
+## Nutzwertanalyse
+| Kriterium                           | Gewichtung | Kilter Assistant | Dichter     | Yoda      |
+|-------------------------------------|------------|------------------|-------------|-----------|
+| Technische Umsetzbarkeit            | 50%        | 2 / 5            | 5 / 5       | 5 / 5     |
+| Kreativität                         | 20%        | 5 / 5            | 3 / 5       | 3 / 5     |
+| Nutzermehrwert / Nutzen             | 10%        | 5 / 5            | 3 / 5       | 1 / 5     |
+| Interessante Funktionen (Bild/File) | 20%        | 5 / 5            | 4 / 5       | 4 / 5     |
+| Gesamtpunktzahl (Ø gewichtet)       | **100%**   | **3.5 / 5**      | **4.2 / 5** | **4 / 5** |
+*Nutzwertanalyse der Ideen*
 
-## Umsetzen
+## Auswertung
+Wir haben und für den Dichter entschieden. Es kann mit Bildern und Text gearbeitet werden und ist gut umsetzbar.
+Der Kilter Assistant ist leider mit den uns bekannten Mitteln technisch zu schwer umzusetzen.
+Yoda ist ein Lustiges Idee doch scheint uns der Nutzen sehr begrenzt.
 
-### Backend
+# Umsetzen
+
+## Backend
 Als Erstes wurde ein einfacher request an die OpenAI client.responses.create endpoint gemacht was sich als unkompliziert erwies. 
 Dieser Endpoint wird in vielen beispielen in der OpenAI Dokumentation für Text generation und Bild analyse verwendet.
 Nachdem es möglich war, erfolgreich eine Antwort vom Endpoint zu erhalten, haben wir überlegt wie wir den API-Key einbauen.
@@ -59,7 +56,7 @@ Durch diese Entscheidung haben wir uns bewusst auch dagegen entschieden einen As
 Ein weiterer grund keinen Assistenten zu nutzen war, dass Assistenten nur mit dem API-Key des eigenen Accounts angesprochen werden können.
 Stattdessen wird ein normales Modell (GPT 4o) angesprochen. Das Model 4o eignet sich besonders für kreative Aufgaben und kann auch Bilder analysieren.
 
-#### Prompt
+### Prompt
 Die meiste arbeit wurde in das Erstellen von den Systemprompts/Instructions gesteckt. 
 Es gibt zwei unterschiedliche Prompts einen für den Fall, dass ein Thema mitgegeben wird, und der Andere für den Fall, dass der User ein Bild anstelle des Themas mitgibt.
 
@@ -67,49 +64,14 @@ Zunächst wird die Rolle der KI definiert, in der festgelegt ist wie sich die KI
 Danach wird der KI erklärt, was sie mit den Inputs des Users machen soll.
 Als Letztes wird noch festgelegt wie der Output strukturiert sein soll und es wird ein Beispiel gegeben.
 Der ganze prompt ist als Anleitung aufgebaut, die befolgt werden soll. Damit sollen konsistente Ergebnisse erzielt werden.
-```python
-system_prompt_theme = """
-Your role:
-You are a poetic writing assistant who creates original poetry inspired by great poets and visual or conceptual themes.
 
-- Accept three main inputs from the user:
-1. The <name of a poet> whose style and voice you should emulate.
-2. The <type of poem> to write (e.g., haiku, sonnet, free verse, limerick, ode, etc.).
-3. The <topic or theme> of the poem.
-
-Your task:
-- If a topic is given, write a poem about that topic in the requested style and form.
-- Always stay true to the poetic tone, rhythm of the chosen poet.
-- The result should feel like an original work written by that poet.
-- Do not copy any existing work.
-
-Formatting:
-- Start with the title of the poem (invented by you).
-- Then present the poem itself, properly formatted.
-
-Example Behavior:
-If the user says:
-    > Poet: Emily Dickinson
-    > Poem Type: Haiku
-    > Topic: A withered rose
-    
-→ You respond with a haiku in Dickinson’s introspective style about a fading rose.
-"""
-```
-#### Anfrage
+### Anfrage
 Wir sprechen den Endpoint OpenAI.responses.create an. Wir haben uns für das Model gpt-4o entschieden es soll gut für kreative Aufgaben sein und kann auch Bilder verarbeiten.
 In dem feld "instructions" geben wir Anweisungen womit das Model mit den vom User mitgegebenen Werten anstellen soll und wie der Output aussehen soll. 
 Wir belassen die Temperature (determinismus Wert) hierbei auf dem standard Wert (0.7), was nach unseren Tests, eine gute Balance zu sein scheint.
-```python
-client = OpenAI(api_key=api_key)
-        
-response = client.responses.create(
-            model="gpt-4o",
-            instructions=system_prompt_theme,
-            input=user_prompt_theme(poet, type, topic)
-        )
-```
-#### Input Validierung
+
+*Python code der Anfrage an den OpenAI-Endpoint*
+### Input Validierung
 Das Model zeigt Schwierigkeiten mit frei erfundenen Inputs oder wenn nicht existierende Gedichttypen angegeben werden.
 Die Probleme zeigen sich im Output format das nicht eingehalten wird.
 Um dem entgegenzuwirken wurde eine Input Validierung eingebaut. Die Inputs werden auch von der KI geprüft. Wenn die Inputs nicht verstanden werden wird schlicht "false" zurückgegeben (ansonsten "true").
@@ -129,15 +91,16 @@ response = client.responses.create(
     max_output_tokens=16
 )
 ```
+*Python code der Anfrage auf den OpenAI-Endpoint für die Input validierung*
 
-#### Text to Speech
+### Text to Speech
 Als zusätzliches Feature haben wir eine Text-to-Speech Funktion integriert, damit man sich das generierte Gedicht vorlesen lassen kann. Dazu nutzen wir die Google Text-to-Speech library (gTTS).
 
-### Frontend
+## Frontend
 Das Frontend wurde mit Typescript und dem Framework React umgesetzt.
 Da man mit React nur schlecht ein Modernes design umsetzen kann, wurde [Material UI (MUI)](https://mui.com/material-ui/) verwendet.
 
-#### Design
+### Design
 MUI verwendet das Material Design von Google, welches ein recht modernes und einfach verständliches design bietet.
 Das Standard theme von MUI wurde nicht angepasst, da es für ein kleines Projekt ausreichend ist.
 
@@ -146,7 +109,7 @@ Standardmässig kann der Benutzer eine beschreibung des Themas eingeben. Bei Bed
 
 MUI ist auch für Mobilgeräte optimiert, was es ein Kinderspiel gemacht hat auch eine gut verwendbares mobile design hinzubekommen.
 
-#### Eingaben
+### Eingaben
 Der Benutzer kann mittels mehrerer Input-Felder die folgenden Daten eingeben:
 - API Key
 - Name des Poeten
@@ -160,14 +123,14 @@ Je nach dem Tab kann man anschliessend noch in ein multiline Textfeld da Thema g
 Das Bild wird auch direkt als vorschau dargestellt, damit man nicht aus Versehen das falsche auswählt.
 Sollte das ganze von einem Handy (oder Ähnlichem) benutzt werden, hat man auch die Option direkt mit der Kamera App ein Bild aufzunehmen.
 
-#### Ausgabe des Textes
+### Ausgabe des Textes
 Nachdem man `Generiern` gedrückt hat, beginnt die generierung des Textes, sowie die der Text to Speech (TTS) Audiodatei.
 Nach dessen abschluss werden die letzten Ergebnisse unter dem Formular als formatiertes Markdown angezeigt.
 Auch hat man die Möglichkeit die TTS Audiodatei abspielen zu lassen, für den Fall, dass man eine lange Ballade nicht selbst vorlesen möchte.
 
 [//]: # (TODO Bilder hinzufügen)
 
-## Auswertung
+# Auswertung
 Die Umsetzung des Projektes war erfolgreich. Es ist möglich, Gedichte zu generieren, die die angegebenen Spezifikationen, wir Thema/Bild und Gedichttype einhalten. 
 Den Poeten wiederspiegeln ist aus mehreren gründen schwierig. Erstens, viele Poeten haben einen ähnlichen Style oder den Style eines anderen Poeten angenommen. 
 Zweitens, manche Poeten haben nur wenige oder keine Gedichte eines gewissen Types geschrieben.
