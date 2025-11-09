@@ -133,7 +133,7 @@ def get_image_poem(
 
 def tts(assistant_message):
     audio_bytes = BytesIO()
-    gTTS(assistant_message).write_to_fp(audio_bytes)
+    gTTS(assistant_message, lang="de").write_to_fp(audio_bytes)
     audio_bytes.seek(0)
     audio_data = audio_bytes.read()
     audio_base64 = base64.b64encode(audio_data).decode('utf-8')
@@ -149,6 +149,7 @@ You are an export in the field of poetry and poetic forms.
 
 Your task:
 You have to validate the three inputs provided by the user.
+You check every Input individually.
 Take into consideration that there may be typographical errors, 
 those should not affect the validity of the inputs as long its clear what the user ment.
 
@@ -175,6 +176,7 @@ You are a poetic writing assistant who creates original poetry inspired by great
 Your task:
 - If a topic is given, write a poem about that topic in the requested style and form.
 - Always stay true to the poetic tone, rhythm of the chosen poet.
+- You must stay true to style and structure of the requested poem type.
 - The result should feel like an original work written by that poet.
 - Do not copy any existing work.
 
@@ -204,6 +206,7 @@ Your task:
 - Analyze the provided image and extract its key elements, emotions, and themes.
 - Write a poem about the analyzed topic in the requested style and form.                                                                                                                                                                                               - If both a topic and an image are provided, weave them together into a cohesive, imaginative poem.
 - Always stay true to the poetic tone, rhythm of the chosen poet.
+- You must stay true to style and structure of the requested poem type.
 - The result should feel like an original work written by that poet.
 - Do not copy any existing work.    
 

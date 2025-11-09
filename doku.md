@@ -120,40 +120,18 @@ Da wir für die Validierung keine komplexen anforderungen haben reicht es, wenn 
 Die Validierung mittels KI bring die Vorteile mit sich, dass so auch Rechtschreibfehler kein problem darstellen.
 Auch hat der Nutzer dadurch mehr Möglichkeiten verschiedene Dichter anzugeben da es keine fixe Liste geben muss.
 ```python
-def is_valid_input(poet, type, api_key):
-    try:
-        client = OpenAI(api_key=api_key)
-
-        response = client.responses.create(
-            model="gpt-4o-mini",
-            instructions=validate_input,
-            input=f"> Poet: {poet}\n> Poem Type: {type}",
-            temperature=0.0,
-            max_output_tokens=16
-        )
-
-        assistant_message = response.output_text.strip().lower()
-
-        if assistant_message == "false":
-            return False
-        else:
-            return True
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+client = OpenAI(api_key=api_key)
+response = client.responses.create(
+    model="gpt-4o-mini",
+    instructions=validate_input,
+    input=f"> Poet: {poet}\n> Poem Type: {type}",
+    temperature=0.0,
+    max_output_tokens=16
+)
 ```
 
 #### Text to Speech
-Als zusätzliches Feature haben wir eine Text-to-Speech Funktion integriert, damit man sich das generierte Gedicht vorlesen lassen kann. Dazu nutzen wir die Google Text-to-Speech library (gTTS).
-```python
-def tts(assistant_message):
-    audio_bytes = BytesIO()
-    gTTS(assistant_message).write_to_fp(audio_bytes)
-    audio_bytes.seek(0)
-    audio_data = audio_bytes.read()
-    audio_base64 = base64.b64encode(audio_data).decode('utf-8')
-    return audio_base64
-```
+Als zusätzliches Feature haben wir eine Text-to-Speech Funktion integriert, damit man sich das generierte Gedicht vorlesen lasse kann. Dazu nutzen wir die Google Text-to-Speech library (gTTS).
 
 ### Frontend
 Das Frontend wurde mit Typescript und dem Framework React umgesetzt.
@@ -189,5 +167,13 @@ Auch hat man die Möglichkeit die TTS Audiodatei abspielen zu lassen, für den F
 
 [//]: # (TODO Bilder hinzufügen)
 
-## Auswerten
+## Auswertung
+Die Umsetzung des Projekt war erfolgreich. Es ist möglich Gedichte zu generieren, die die angegebenen Spezifikationen, wir Thema/Bild und Gedichttype einhalten. 
+Den Poet wiederzuspiegeln ist aus mehreren gründen schwierig. Erstens, viele Poeten haben einen ähnlichen Style oder den Style eines anderen Poeten angenommen. 
+Zweitens, manche Poeten haben nur wenige oder keine Gedichte eines gewissen Types geschrieben.
+Durch die Validierung der Inputs wird der KI das generieren eine Gedichts erleichter da keine sinnlosen Inputs verarbeitet werden.
+Das Frontend ist schlicht aber intuitiv und ermöglicht eine einfache Nutzung der Applikation auf einem Computer sowohl auch mit dem Handy.
 
+Interessant für uns war wie viele Einstellungen man bei einem Request an die OpenAI-API machen kann (temperature, top_p, ...) und wie stark diese Einstellungen den Output beeinflussen.
+Auch eine relevante erkenntnis ist, dass ein klar strukturierter Prompt und Instruktionen der KI enorm helfen einen konsistenten Output zu generieren, vor allem auch Sachen zu definieren, die nicht gemacht werden sollen hat extrem geholfen.
+Sehr interessant zu sehen war, dass unterschiedliche Models für unterschiedliche Aufgaben besser geeignet waren, z.B. haben wir Anfangs das gpt-4-mini genutzt was Probleme hatte die Dichter zu interpretieren.
