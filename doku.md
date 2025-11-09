@@ -131,7 +131,7 @@ response = client.responses.create(
 ```
 
 #### Text to Speech
-Als zusätzliches Feature haben wir eine Text-to-Speech Funktion integriert, damit man sich das generierte Gedicht vorlesen lasse kann. Dazu nutzen wir die Google Text-to-Speech library (gTTS).
+Als zusätzliches Feature haben wir eine Text-to-Speech Funktion integriert, damit man sich das generierte Gedicht vorlesen lassen kann. Dazu nutzen wir die Google Text-to-Speech library (gTTS).
 
 ### Frontend
 Das Frontend wurde mit Typescript und dem Framework React umgesetzt.
@@ -168,12 +168,12 @@ Auch hat man die Möglichkeit die TTS Audiodatei abspielen zu lassen, für den F
 [//]: # (TODO Bilder hinzufügen)
 
 ## Auswertung
-Die Umsetzung des Projekt war erfolgreich. Es ist möglich Gedichte zu generieren, die die angegebenen Spezifikationen, wir Thema/Bild und Gedichttype einhalten. 
-Den Poet wiederzuspiegeln ist aus mehreren gründen schwierig. Erstens, viele Poeten haben einen ähnlichen Style oder den Style eines anderen Poeten angenommen. 
+Die Umsetzung des Projektes war erfolgreich. Es ist möglich, Gedichte zu generieren, die die angegebenen Spezifikationen, wir Thema/Bild und Gedichttype einhalten. 
+Den Poeten wiederspiegeln ist aus mehreren gründen schwierig. Erstens, viele Poeten haben einen ähnlichen Style oder den Style eines anderen Poeten angenommen. 
 Zweitens, manche Poeten haben nur wenige oder keine Gedichte eines gewissen Types geschrieben.
-Durch die Validierung der Inputs wird der KI das generieren eine Gedichts erleichter da keine sinnlosen Inputs verarbeitet werden.
-Das Frontend ist schlicht aber intuitiv und ermöglicht eine einfache Nutzung der Applikation auf einem Computer sowohl auch mit dem Handy.
+Durch die Validierung der Inputs wird der KI das Generieren eines Gedichts erleichter da keine sinnlosen Inputs verarbeitet werden.
+Das Frontend ist schlicht aber intuitiv und ermöglicht eine einfache Nutzung der Applikation sowohl auf einem Computer als auch mit dem Handy.
 
 Interessant für uns war wie viele Einstellungen man bei einem Request an die OpenAI-API machen kann (temperature, top_p, ...) und wie stark diese Einstellungen den Output beeinflussen.
 Auch eine relevante erkenntnis ist, dass ein klar strukturierter Prompt und Instruktionen der KI enorm helfen einen konsistenten Output zu generieren, vor allem auch Sachen zu definieren, die nicht gemacht werden sollen hat extrem geholfen.
-Sehr interessant zu sehen war, dass unterschiedliche Models für unterschiedliche Aufgaben besser geeignet waren, z.B. haben wir Anfangs das gpt-4-mini genutzt was Probleme hatte die Dichter zu interpretieren.
+Sehr interessant zu sehen war, dass unterschiedliche Models für unterschiedliche Aufgaben besser geeignet waren, z.B. haben wir Anfangs das gpt-4-mini genutzt, was Probleme hatte die Dichter zu interpretieren.
