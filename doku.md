@@ -1,4 +1,6 @@
-#  Technische Möglichkeiten von GPT Assistenten
+
+
+# Technische Möglichkeiten von GPT Assistenten
 ## System Instructions
 Die System Instructions können genutzt werden, um dem Assistant einen groben Rahmen zu geben, wie er sich verhalten soll, wie Tief ins Detail er mit seinen Antworten gehen soll und für welches Themenfeld er geschaffen ist.
 ## Files / File Search
@@ -94,7 +96,7 @@ response = client.responses.create(
 *Python code der Anfrage auf den OpenAI-Endpoint für die Input validierung*
 
 ### Text to Speech
-Als zusätzliches Feature haben wir eine Text-to-Speech Funktion integriert, damit man sich das generierte Gedicht vorlesen lassen kann. Dazu nutzen wir die Google Text-to-Speech library (gTTS).
+Als zusätzliches Feature haben wir eine Text-to-Speech Funktion integriert, damit man sich das generierte Gedicht vorlesen lassen kann. Dazu nutzen wir die [Google Text-to-Speech library (gTTS)](https://pypi.org/project/gTTS/).
 
 ## Frontend
 Das Frontend wurde mit Typescript und dem Framework React umgesetzt.
